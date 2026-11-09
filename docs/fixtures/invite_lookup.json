@@ -1,0 +1,19 @@
+{
+  "kind": "friend",
+  "inviter": {
+    "id": "01M6TY2FG01S1D9JQ8GS4GHR5R",
+    "username": "alice",
+    "display_name": "Alice L.",
+    "avatar": {
+      "url": "/m/01M6TY3KM8RX90WDGAMG244Z4P?e=1794142800&s=CZ16aFvBNfuA6UhmjNQTUuqr-UgYRRERLK6OuzI-us8",
+      "width": 512,
+      "height": 512,
+      "content_type": "image/jpeg",
+      "duration_ms": null,
+      "bytes": 8243
+    }
+  },
+  "server_name": "Test Frame",
+  "can_register": true
+}
+

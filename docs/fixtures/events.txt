@@ -1,0 +1,42 @@
+: Example Server-Sent Events from GET /api/v1/events (one of each type, real server output).
+: Lines starting with ':' are comments; the server also sends ': ping' every 25 s.
+
+event: moment.new
+data: {"moment":{"id":"01M6TY8458ST9KEDVB1S6TH3JC","author":{"id":"01M6TY2FG01S1D9JQ8GS4GHR5R","username":"alice","display_name":"Alice L.","avatar":{"url":"/m/01M6TY3KM8RX90WDGAMG244Z4P?e=1794142800&s=CZ16aFvBNfuA6UhmjNQTUuqr-UgYRRERLK6OuzI-us8","width":512,"height":512,"content_type":"image/jpeg","duration_ms":null,"bytes":8243}},"kind":"photo","created_at":1794052985000,"caption":{"type":"text","text":"sunset 🌅","style":"classic","color":null,"background":null,"data":null},"media":{"url":"/m/01M6TY8458ST9KEDVB1S6TH3JA?e=1794142800&s=L4guFJQeHMt55siQMvyEakhsW9fCfbJCQYJp6015kBc","width":1440,"height":1440,"content_type":"image/jpeg","duration_ms":null,"bytes":10431},"thumb":{"url":"/m/01M6TY8458ST9KEDVB1S6TH3JB?e=1794142800&s=BDMqzJJxkBYcXKkdTlTW9oX4i0BzEpnLvn7i99xiYmY","width":128,"height":128,"content_type":"image/jpeg","duration_ms":null,"bytes":4072},"audience":"all","recipient_ids":null,"local_date":"2026-11-07","reactions":[],"viewers":null,"viewed":false}}
+
+event: moment.deleted
+data: {"id":"01M6TYCMP8BV14GRDAR14GDQF1"}
+
+event: moment.reaction
+data: {"emoji":"🔥","moment_id":"01M6TY989G4W670A5WH17RYY51","user":{"id":"01M6TY2FG01S1D9JQ8GS4GHR5R","username":"alice","display_name":"Alice L.","avatar":{"url":"/m/01M6TY3KM8RX90WDGAMG244Z4P?e=1794142800&s=CZ16aFvBNfuA6UhmjNQTUuqr-UgYRRERLK6OuzI-us8","width":512,"height":512,"content_type":"image/jpeg","duration_ms":null,"bytes":8243}}}
+
+event: moment.viewed
+data: {"moment_id":"01M6TY989G4W670A5WH17RYY51","user":{"id":"01M6TY2FG01S1D9JQ8GS4GHR5R","username":"alice","display_name":"Alice L.","avatar":{"url":"/m/01M6TY3KM8RX90WDGAMG244Z4P?e=1794142800&s=CZ16aFvBNfuA6UhmjNQTUuqr-UgYRRERLK6OuzI-us8","width":512,"height":512,"content_type":"image/jpeg","duration_ms":null,"bytes":8243}},"viewed_at":1794053096000}
+
+event: message.new
+data: {"message":{"id":"01M6TYDRTGHQH760ET8SGSTW08","client_id":"00000005-0000-4000-8000-000000000005","sender_id":"01M6TY3KM8RX90WDGAMG244Z4G","recipient_id":"01M6TY2FG01S1D9JQ8GS4GHR5R","text":"love this","created_at":1794053170000,"moment":{"id":"01M6TY8458ST9KEDVB1S6TH3JC","author_id":"01M6TY2FG01S1D9JQ8GS4GHR5R","kind":"photo","thumb":{"url":"/m/01M6TY8458ST9KEDVB1S6TH3JB?e=1794142800&s=BDMqzJJxkBYcXKkdTlTW9oX4i0BzEpnLvn7i99xiYmY","width":128,"height":128,"content_type":"image/jpeg","duration_ms":null,"bytes":4072},"caption":{"type":"text","text":"sunset 🌅","style":"classic","color":null,"background":null,"data":null},"deleted":false},"reactions":[],"read_at":null}}
+
+event: message.deleted
+data: {"id":"01M6TYG130JWGDDXS9QVTMH2PE","peer_id":"01M6TY2FG01S1D9JQ8GS4GHR5R"}
+
+event: message.read
+data: {"peer_id":"01M6TY2FG01S1D9JQ8GS4GHR5R","read_at":1794053244000,"up_to":"01M6TYEWYRZWK89QT1070320GF"}
+
+event: message.reaction
+data: {"emoji":"😍","message_id":"01M6TYEWYRZWK89QT1070320GF","peer_id":"01M6TY2FG01S1D9JQ8GS4GHR5R","user_id":"01M6TY3KM8RX90WDGAMG244Z4G"}
+
+event: typing
+data: {"peer_id":"01M6TY2FG01S1D9JQ8GS4GHR5R"}
+
+event: friend.request
+data: {"request":{"id":"01M6TY4QRGAFCTCSXYAH619SMZ","from":{"id":"01M6TY3KM8RX90WDGAMG244Z4G","username":"bob","display_name":"Bob","avatar":{"url":"/m/01M6TY3KM8RX90WDGAMG244Z4Q?e=1794142800&s=PX2hw995uM0rBTNwEXvrGlViT6roWEQyAogtkgdHIKI","width":512,"height":512,"content_type":"image/jpeg","duration_ms":null,"bytes":8682}},"to":{"id":"01M6TY2FG01S1D9JQ8GS4GHR5R","username":"alice","display_name":"Alice","avatar":{"url":"/m/01M6TY3KM8RX90WDGAMG244Z4P?e=1794142800&s=CZ16aFvBNfuA6UhmjNQTUuqr-UgYRRERLK6OuzI-us8","width":512,"height":512,"content_type":"image/jpeg","duration_ms":null,"bytes":8243}},"created_at":1794052874000}}
+
+event: friend.accepted
+data: {"friend":{"user":{"id":"01M6TY2FG01S1D9JQ8GS4GHR5R","username":"alice","display_name":"Alice","avatar":{"url":"/m/01M6TY3KM8RX90WDGAMG244Z4P?e=1794142800&s=CZ16aFvBNfuA6UhmjNQTUuqr-UgYRRERLK6OuzI-us8","width":512,"height":512,"content_type":"image/jpeg","duration_ms":null,"bytes":8243}},"since":1794052874000}}
+
+event: friend.removed
+data: {"user_id":"01M6TYJ9BGV8SKQDX74V77Q0S0"}
+
+event: profile.updated
+data: {"user":{"id":"01M6TY2FG01S1D9JQ8GS4GHR5R","username":"alice","display_name":"Alice L.","avatar":{"url":"/m/01M6TY3KM8RX90WDGAMG244Z4P?e=1794142800&s=CZ16aFvBNfuA6UhmjNQTUuqr-UgYRRERLK6OuzI-us8","width":512,"height":512,"content_type":"image/jpeg","duration_ms":null,"bytes":8243}}}
+

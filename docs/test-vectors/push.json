@@ -1,0 +1,17 @@
+{
+  "description": "AES-256-GCM push payload vectors. payload_b64 = base64(nonce12 || ciphertext || tag16), no AAD. Implementations must decrypt payload_b64 with key_b64 to exactly plaintext_utf8.",
+  "vectors": [
+    {
+      "key_b64": "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=",
+      "nonce_hex": "6465666768696a6b6c6d6e6f",
+      "plaintext_utf8": "{\"v\":1,\"type\":\"moment\",\"title\":\"Alice\",\"body\":\"sent a new photo\",\"moment_id\":\"01JC3V9Z4X8Q2M7T5R1N6K0B3H\",\"peer_id\":\"01JC3V9Z4X8Q2M7T5R1N6K0B3J\",\"thumb_path\":\"/m/01JC3VA0000000000000000000?e=1730086400&s=abc\",\"created_at\":1730000000000}",
+      "payload_b64": "ZGVmZ2hpamtsbW5vMzmoREPYerxKGy+N+F9IkC2vY2T/Tt9Q07jYJJ6Bn2rVhSmjKTC3Jp+cHEbfeOi8fjXsx0FqL02N0dy+gPXKqCSutmG7LlVx1AaJYSuoAdcuOyxinp+5nuegBIlMR3sDvz+kNVsPizaR1vy1x2jKt0tPoiXjSYh+8UrFiICAUP9jrdWfPQcQGod/HTXLsxaguuWJLiUm5M1B8AolwiuH1f0eF23an9K2KmiRx9xEk/6mwf2ZB4Ni/0gxIXj95SL//Rw22pAjQDFyWRheJFiRKmxq9XDiOXjYlkdjoM7fINx9F5LLkrUbDiqcbKyCCDEbfCE7Pe551OfT24Qu"
+    },
+    {
+      "key_b64": "ZO5gCUcbbwNrIytFKFne4ANtsQyc+cjbd8LJMXC/vjs=",
+      "nonce_hex": "626e1e3b6935c66a2c8ab9c8",
+      "plaintext_utf8": "{\"v\":1,\"type\":\"message\",\"title\":\"Bob 🐦\",\"body\":\"héllo — ünïcode ✓\",\"moment_id\":null,\"peer_id\":\"01JC3V9Z4X8Q2M7T5R1N6K0B3J\",\"thumb_path\":null,\"created_at\":1730000000001}",
+      "payload_b64": "Ym4eO2k1xmosirnIWQ1GU3w3ezD/pnd6nac1tl11yxoOwTQp+XLcj7HwyCVYuS6N5Q/0i4zSTX74lGwQyh8IKFlAnAWD5NoYe3b8qHYivjEkBMGsuGKWyFatPlJii0wxAGUWuBL3lz8FuEF1H9lPaqRZmqcAhsmcPCCrlSsM2PZJDbzZl8cKLugPepcGTW3OMb+Fa95vEr78wr5cndXi24bTERy1HkBfaa0d67Nwtngivn2IyVH7wpbbpLYWL1A/wyDDCjD3iyHKAqw1JVg="
+    }
+  ]
+}

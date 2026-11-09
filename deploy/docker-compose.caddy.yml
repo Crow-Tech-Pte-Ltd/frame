@@ -1,0 +1,84 @@
+# Frame server behind Caddy (automatic HTTPS) with Docker Compose.
+#
+#   cd deploy
+#   cp frame.conf.example frame.conf             # edit; leave FRAME_DOMAIN unset
+#   echo "FRAME_HOSTNAME=frame.example.com" > .env
+#   docker compose -f docker-compose.caddy.yml up -d     # pulls the official image
+#
+# Build from source instead of pulling (see docker-compose.build.yml):
+#   docker compose -f docker-compose.caddy.yml -f docker-compose.build.yml up -d --build
+#
+# Point your domain's DNS (A/AAAA record) at this machine and open ports 80 and
+# 443 (TCP) plus 443/UDP for HTTP/3. Caddy obtains and renews certificates.
+#
+# Admin CLI:  docker compose -f docker-compose.caddy.yml exec frame frame-server admin user list
+
+name: frame
+
+services:
+  frame:
+    # Official multi-arch image (amd64, arm64); ":0" follows 0.x releases.
+    image: ghcr.io/crow-tech-pte-ltd/frame-server:0
+    restart: unless-stopped
+    env_file: frame.conf
+    environment:
+      FRAME_DATA_DIR: /data
+      FRAME_LISTEN: ":8080"
+      FRAME_DOMAIN: ""                       # Caddy terminates TLS
+      # Required for Sign in with Apple/Google (sign-ins are bound to this
+      # name) and used in invite links. Overrides frame.conf.
+      FRAME_PUBLIC_URL: https://${FRAME_HOSTNAME:?set FRAME_HOSTNAME in deploy/.env}
+      # Trust X-Forwarded-For only from the frame-net subnet (where Caddy
+      # lives), so rate limits see each visitor's IP, not Caddy's.
+      FRAME_TRUSTED_PROXIES: 172.31.250.0/24
+    volumes:
+      - frame-data:/data
+    networks: [frame-net]
+    # No published ports: only Caddy can reach the server.
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on: [frame]
+    environment:
+      FRAME_HOSTNAME: ${FRAME_HOSTNAME:?set FRAME_HOSTNAME in deploy/.env}
+      FRAME_UPSTREAM: frame:8080
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data        # certificates — keep this volume
+      - caddy-config:/config
+    networks: [frame-net]
+    cap_drop: [ALL]
+    cap_add: [NET_BIND_SERVICE]
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+networks:
+  frame-net:
+    ipam:
+      config:
+        # Fixed so FRAME_TRUSTED_PROXIES can name it. Change both if it
+        # collides with a network you already use.
+        - subnet: 172.31.250.0/24
+          gateway: 172.31.250.1
+
+volumes:
+  frame-data:
+  caddy-data:
+  caddy-config:

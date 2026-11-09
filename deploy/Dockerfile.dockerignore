@@ -1,0 +1,7 @@
+# Build context is the repository root; only server/ is needed.
+# (BuildKit uses <Dockerfile>.dockerignore next to the Dockerfile.)
+*
+!server/
+server/.devdata/
+server/bin/
+server/**/*.test

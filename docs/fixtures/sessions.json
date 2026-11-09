@@ -1,0 +1,13 @@
+{
+  "sessions": [
+    {
+      "id": "01M6TY2FG01S1D9JQ8GS4GHR5S",
+      "device_name": "Alice's iPhone",
+      "platform": "ios",
+      "created_at": 1794052800000,
+      "last_seen_at": 1794053207000,
+      "current": true
+    }
+  ]
+}
+

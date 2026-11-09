@@ -1,0 +1,51 @@
+# Caddy reverse proxy for Frame: automatic HTTPS (Let's Encrypt / ZeroSSL),
+# HTTP/2 + HTTP/3, and active health checks of the Frame server.
+#
+# With docker-compose.caddy.yml the two variables below are set for you:
+#   FRAME_HOSTNAME   your domain, from deploy/.env (e.g. frame.example.com)
+#   FRAME_UPSTREAM   frame:8080 (the Frame container)
+#
+# Using Caddy installed on the host (apt install caddy) instead? Copy this file
+# to /etc/caddy/Caddyfile and replace {$FRAME_HOSTNAME} with your domain and
+# {$FRAME_UPSTREAM:127.0.0.1:8080} with 127.0.0.1:8080, then set in frame.conf:
+#   FRAME_LISTEN=127.0.0.1:8080
+#   FRAME_PUBLIC_URL=https://frame.example.com
+#   FRAME_TRUSTED_PROXIES=127.0.0.1/32,::1/128
+
+{$FRAME_HOSTNAME} {
+	# Don't add `encode` here: compressing Server-Sent Events (/api/v1/events)
+	# would buffer realtime updates, and photos/videos don't compress anyway.
+
+	request_body {
+		# Slightly above FRAME_MAX_UPLOAD_MB (default 50).
+		max_size 64MB
+	}
+
+	reverse_proxy {$FRAME_UPSTREAM:127.0.0.1:8080} {
+		# Stream responses immediately (Server-Sent Events, video ranges).
+		flush_interval -1
+
+		# Mark the server down if /healthz stops answering.
+		health_uri /healthz
+		health_interval 30s
+		health_timeout 5s
+	}
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+
+	log {
+		output stdout
+		# Don't log query strings: media URLs carry signed capabilities.
+		format filter {
+			request>uri query {
+				delete e
+				delete s
+			}
+			request>headers>Authorization delete
+			request>headers>Cookie delete
+		}
+	}
+}

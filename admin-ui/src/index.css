@@ -1,0 +1,271 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Self-hosted fonts (no Google Fonts / CDN). Same files and unicode ranges as
+   the Crow Tech website's next/font build. Licences: public/licenses/. */
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./assets/fonts/ubuntu-400-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./assets/fonts/ubuntu-400-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./assets/fonts/ubuntu-700-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./assets/fonts/ubuntu-700-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Azeret Mono";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./assets/fonts/azeret-mono-var-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Azeret Mono";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./assets/fonts/azeret-mono-var-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329,
+    U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@layer base {
+  /* Brand colours and semantic tokens copied from the Crow Tech website
+     (app/globals.css). Panel additions: --page, --soft, --shadow. */
+  :root {
+    --font-ubuntu: "Ubuntu";
+    --font-azeret-mono: "Azeret Mono";
+    --radius: 0.5rem;
+    color-scheme: light;
+
+    --surface-50: 0 0% 100%; /* #FFFFFF */
+    --surface-100: 40 84% 95%; /* #FDF7E5 */
+    --surface-200: 210 10% 93%; /* #ECEDEE */
+
+    --primary-50: 0 0% 90%; /* #E5E5E5 */
+    --primary-100: 0 0% 60%; /* #999999 */
+    --primary-200: 0 0% 40%; /* #666666 */
+    --primary-300: 0 0% 20%; /* #333333 */
+    --primary-400: 0 0% 0%; /* #000000 */
+
+    --danger-50: 0 80% 95%;
+    --danger-100: 0 64% 66%;
+    --danger-200: 0 64% 47%;
+    --danger-300: 0 65% 40%;
+    --danger-400: 0 62% 26%;
+
+    --success-50: 120 56% 90%;
+    --success-100: 119 58% 76%;
+    --success-200: 119 58% 64%;
+    --success-300: 119 51% 38%;
+    --success-400: 165 80% 23%;
+
+    --warning-50: 38 87% 94%;
+    --warning-100: 35 85% 84%;
+    --warning-200: 35 85% 64%;
+    --warning-300: 34 85% 53%;
+    --warning-400: 34 86% 35%;
+
+    --biru-50: 220 87% 89%;
+    --biru-100: 220 82% 79%;
+    --biru-200: 220 86% 68%;
+    --biru-300: 220 78% 59%;
+    --biru-400: 220 78% 50%;
+
+    --oren-50: 19 100% 85%;
+    --oren-100: 19 100% 75%;
+    --oren-200: 19 99% 66%;
+    --oren-300: 19 99% 60%;
+    --oren-400: 23 84% 52%;
+
+    --kuning-50: 45 100% 90%;
+    --kuning-100: 43 100% 80%;
+    --kuning-200: 43 99% 71%;
+    --kuning-300: 43 99% 62%;
+    --kuning-400: 43 89% 51%;
+
+    --background: var(--surface-50);
+    --foreground: var(--primary-400);
+    --card: var(--surface-50);
+    --card-foreground: var(--primary-400);
+    --popover: var(--surface-50);
+    --popover-foreground: var(--primary-400);
+    --primary: var(--primary-400);
+    --primary-foreground: var(--surface-50);
+    --secondary: var(--primary-100);
+    --secondary-foreground: var(--primary-400);
+    --muted: var(--primary-100);
+    --muted-foreground: var(--primary-300);
+    --accent: var(--kuning-200);
+    --accent-foreground: var(--surface-50);
+    --destructive: var(--danger-200);
+    --destructive-foreground: var(--surface-50);
+    --border: var(--primary-100);
+    --input: var(--primary-200); /* panel: website uses primary-50; darker for 3:1 contrast */
+    --ring: var(--primary-400);
+
+    --page: var(--surface-100);
+    --soft: var(--kuning-50);
+    --soft-foreground: var(--primary-400);
+    --shadow: var(--primary-400);
+  }
+
+  /* Dark tokens: the website's .dark set, used for the system preference
+     (unless the user picked Light) and for an explicit Dark choice. */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light) {
+      color-scheme: dark;
+      --background: 0 0% 4%;
+      --foreground: var(--surface-50);
+      --card: 0 0% 11%;
+      --card-foreground: var(--surface-50);
+      --popover: 0 0% 11%;
+      --popover-foreground: var(--surface-50);
+      --primary: var(--surface-50);
+      --primary-foreground: var(--primary-400);
+      --secondary: var(--primary-200);
+      --secondary-foreground: var(--surface-50);
+      --muted: var(--primary-200);
+      --muted-foreground: 0 0% 72%;
+      --accent: var(--biru-200);
+      --accent-foreground: var(--surface-50);
+      --destructive: var(--danger-300);
+      --destructive-foreground: var(--surface-50);
+      --border: var(--primary-200);
+      --input: var(--primary-200);
+      --ring: var(--surface-50);
+      --page: 0 0% 0%;
+      --soft: 43 45% 16%;
+      --soft-foreground: var(--surface-50);
+      --shadow: var(--kuning-300);
+    }
+  }
+  :root.dark {
+    color-scheme: dark;
+    --background: 0 0% 4%;
+    --foreground: var(--surface-50);
+    --card: 0 0% 11%;
+    --card-foreground: var(--surface-50);
+    --popover: 0 0% 11%;
+    --popover-foreground: var(--surface-50);
+    --primary: var(--surface-50);
+    --primary-foreground: var(--primary-400);
+    --secondary: var(--primary-200);
+    --secondary-foreground: var(--surface-50);
+    --muted: var(--primary-200);
+    --muted-foreground: 0 0% 72%;
+    --accent: var(--biru-200);
+    --accent-foreground: var(--surface-50);
+    --destructive: var(--danger-300);
+    --destructive-foreground: var(--surface-50);
+    --border: var(--primary-200);
+    --input: var(--primary-200);
+    --ring: var(--surface-50);
+    --page: 0 0% 0%;
+    --soft: 43 45% 16%;
+    --soft-foreground: var(--surface-50);
+    --shadow: var(--kuning-300);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: var(--font-ubuntu), Arial, sans-serif;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-azeret tracking-tight;
+  }
+  :focus-visible {
+    outline: 2px solid hsl(var(--biru-400));
+    outline-offset: 2px;
+  }
+  ::selection {
+    background: hsl(var(--kuning-200));
+    color: hsl(var(--primary-400));
+  }
+}
+
+@layer components {
+  /* Native <dialog> (see components/ui/alert-dialog.tsx). */
+  dialog.frame-dialog::backdrop {
+    background: rgb(0 0 0 / 0.35);
+  }
+  dialog.frame-dialog {
+    color: hsl(var(--foreground));
+  }
+  dialog.frame-drawer::backdrop {
+    background: rgb(0 0 0 / 0.35);
+  }
+  body.dialog-open {
+    overflow: hidden;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .border-border {
+    border-color: hsl(var(--border));
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  /* Logo swap: light logo by default, negative logo in dark mode. */
+  .only-dark {
+    display: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light) .only-light {
+      display: none;
+    }
+    :root:not(.light) .only-dark {
+      display: block;
+    }
+  }
+  :root.dark .only-light {
+    display: none;
+  }
+  :root.dark .only-dark {
+    display: block;
+  }
+}

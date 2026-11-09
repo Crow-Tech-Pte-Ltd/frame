@@ -1,0 +1,32 @@
+# OS / editors
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Admin panel (the built output in server/internal/adminui/dist IS committed)
+admin-ui/node_modules/
+admin-ui/.vite/
+
+# Go
+server/.devdata/
+server/bin/
+/dist/
+*.test
+*.out
+coverage.*
+
+# Caches
+.cache/
+__pycache__/
+
+# Secrets and local configuration: never commit
+*.p8
+*.pem
+*.key
+*.jks
+*.keystore
+.env
+*.env
+deploy/frame.conf
+**/secrets/

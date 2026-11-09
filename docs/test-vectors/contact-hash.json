@@ -1,0 +1,17 @@
+{
+  "description": "Contact hash = lowercase hex sha256('frame-contact-v1:' + normalized)",
+  "vectors": [
+    {
+      "normalized": "+34600111222",
+      "hash": "c9cd7c962b0cf1515c00ce365028388b6412392fb0f8ad26e1220910b9e2004a"
+    },
+    {
+      "normalized": "alice@example.com",
+      "hash": "5230314ff8ad8ec4317fb251be097969ac435df2509e28c123e97990861fb9ab"
+    },
+    {
+      "normalized": "+6591234567",
+      "hash": "4334e5bf625116918d935b95030bc5ded7af865d808dc78c99dae5af4e296073"
+    }
+  ]
+}

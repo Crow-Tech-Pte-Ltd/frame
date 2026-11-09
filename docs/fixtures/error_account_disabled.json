@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "account_disabled",
+    "message": "This account has been suspended by the server's admin"
+  }
+}
+

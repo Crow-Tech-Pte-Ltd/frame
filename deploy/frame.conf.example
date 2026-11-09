@@ -1,0 +1,174 @@
+# Frame server configuration — KEY=value, one per line, '#' starts a comment.
+#
+# Where this file lives:
+#   systemd (install.sh): /etc/frame/frame.conf   (root-owned, mode 0600)
+#   Docker Compose:       deploy/frame.conf        (next to docker-compose.yml)
+#
+# Every setting is optional — with nothing set you get a working server on
+# plain HTTP port 8080. Uncomment and edit only what you need, then restart:
+#   systemd: sudo systemctl restart frame
+#   Docker:  docker compose up -d
+#
+# Quoting: wrap values containing spaces, quotes or '#' in double quotes
+# (FRAME_NAME="Daniel's Frame"). Wrap secrets containing '$' or '\' in single
+# quotes. Never commit this file: it can contain passwords and API keys.
+#
+# Full reference: docs/CONFIG.md · guide: docs/SELF-HOSTING.md
+
+
+# ── Basics ─────────────────────────────────────────────────────────────────
+
+# Settings marked [panel] can also be changed in the web admin panel
+# (/admin → Settings). Anything you set HERE wins and shows as locked
+# ("set in frame.conf") in the panel — leave them commented out to manage
+# them from the panel.
+
+# [panel] Name shown in the app ("Connected to …").
+#FRAME_NAME="Frame"
+
+# [panel] Who may create an account:
+#   invite  (default) only people with an invite: a link from the admin panel,
+#           or a member's link from the app when FRAME_USER_INVITES is on
+#   open    anyone who knows your server address
+#   closed  nobody; admins create accounts in the panel or with
+#           `frame-admin user create`
+#FRAME_REGISTRATION=invite
+
+# [panel] On invite-only servers, can members' friend-invite links (shared
+# from the app) also bring in new people? false = only invites created in the
+# admin panel let people join.
+#FRAME_USER_INVITES=true
+
+# Sign-in methods offered by the app (comma-separated subset of
+# email,phone,apple,google). Phone numbers are just identifiers (no SMS).
+#FRAME_AUTH_METHODS=email,phone,apple,google
+
+
+# ── Admin panel ────────────────────────────────────────────────────────────
+# A web dashboard at https://<your server>/admin for managing users, invites
+# and settings (docs/ADMIN.md). It never shows anyone's photos or messages.
+# On first start the server logs a one-time link to create your admin account
+# (`journalctl -u frame | grep "admin account"`; new link: `frame-admin setup-link`).
+#   on     served at /admin next to the app API (default)
+#   local  only answers clients on this machine or in FRAME_TRUSTED_PROXIES
+#          networks (everyone else gets 404)
+#   off    no web panel (the frame-admin CLI still works)
+#FRAME_ADMIN=on
+
+# Serve the panel ONLY on this separate address instead of /admin on the main
+# one, e.g. reachable through an SSH tunnel:
+#   ssh -N -L 8081:127.0.0.1:8081 you@your-server  →  http://localhost:8081/admin/
+#FRAME_ADMIN_LISTEN=127.0.0.1:8081
+
+
+# ── Network & HTTPS ────────────────────────────────────────────────────────
+
+# Recipe A (VPS with your own domain): set your domain here and the server
+# gets free Let's Encrypt certificates itself, serving HTTPS on :443 and
+# redirecting :80. Point the domain's DNS at the server and open ports 80+443.
+# (With install.sh, re-run `sudo sh install.sh --reconfigure` after setting it.)
+# Also set FRAME_PUBLIC_URL below to https://<the same domain>.
+#FRAME_DOMAIN=frame.example.com
+
+# Optional e-mail Let's Encrypt may use for expiry warnings.
+#FRAME_ACME_EMAIL=you@example.com
+
+# Plain-HTTP listen address, used when FRAME_DOMAIN is NOT set (behind Caddy,
+# Cloudflare Tunnel or another reverse proxy). 127.0.0.1:8080 keeps it
+# reachable only from this machine — what you want behind a local proxy/tunnel.
+# (Docker Compose forces :8080 inside the container; leave unset there.)
+#FRAME_LISTEN=127.0.0.1:8080
+
+# The address(es) people type into the app — SET THIS IN EVERY SETUP.
+#  • Sign in with Apple / Google only work when it is set: each sign-in is bound
+#    to this server's name, so a token obtained for another Frame server can't
+#    be replayed against yours (docs/SECURITY.md). Without it (and without
+#    FRAME_DOMAIN) those buttons are hidden in the app.
+#  • The first URL is used in invite links.
+# Several names (e.g. a LAN name too)? Comma-separate them, canonical first:
+#   FRAME_PUBLIC_URL=https://frame.example.com,http://frame.local:8080
+# Defaults to https://$FRAME_DOMAIN when FRAME_DOMAIN is set.
+#FRAME_PUBLIC_URL=https://frame.example.com
+
+# Reverse proxies whose X-Forwarded-For header is trusted, so rate limits see
+# each visitor's real IP instead of the proxy's (comma-separated IPs/CIDRs).
+# The word `cloudflare` additionally trusts CF-Connecting-IP — but only from
+# loopback and the CIDRs listed here, never from anywhere else.
+#   cloudflared on this host (Recipe B):  FRAME_TRUSTED_PROXIES=cloudflare,127.0.0.1/32
+#   Caddy/nginx on this host (Recipe D):  FRAME_TRUSTED_PROXIES=127.0.0.1/32,::1/128
+#   Docker Compose: set in the compose file (the Compose network's subnet).
+# Leave unset when clients connect directly (FRAME_DOMAIN): trusting a proxy
+# that isn't there would let clients fake their IP.
+#FRAME_TRUSTED_PROXIES=
+
+
+# ── Storage ────────────────────────────────────────────────────────────────
+
+# Where the database, photos/videos and generated secrets (secrets.json) live.
+# systemd and Docker set this for you (/var/lib/frame and /data) — leave unset.
+#FRAME_DATA_DIR=./frame-data
+
+# local = files in the data directory (default); s3 = an S3-compatible bucket
+# such as Cloudflare R2 (10 GB free, free egress).
+#FRAME_STORAGE=local
+
+# S3 / Cloudflare R2 (only when FRAME_STORAGE=s3). Use a PRIVATE bucket and a
+# token scoped to just that bucket with "Object Read & Write".
+#FRAME_S3_ENDPOINT=https://<ACCOUNT_ID>.r2.cloudflarestorage.com
+#FRAME_S3_BUCKET=frame-media
+#FRAME_S3_REGION=auto
+#FRAME_S3_ACCESS_KEY_ID=
+#FRAME_S3_SECRET_ACCESS_KEY=''
+#FRAME_S3_PREFIX=frame/
+
+# Encrypt every object (AES-256-GCM) before it leaves this server, so the
+# bucket provider only stores ciphertext. The key is in secrets.json in the
+# data directory — BACK IT UP: without it your media cannot be read.
+#FRAME_S3_ENCRYPT=true
+
+
+# ── Push notifications & invites ───────────────────────────────────────────
+
+# Push relay run by the Frame app publisher. It only ever sees encrypted
+# payloads and opaque device tokens. Set to empty (FRAME_PUSH_RELAY=) to turn
+# push off; the apps then refresh widgets every ~15 minutes instead.
+#FRAME_PUSH_RELAY=https://frame.crow.sg
+
+# Base of shareable invite links. The default page opens the app (or shows
+# store links); your server address travels in the link's #fragment, which
+# browsers never send to that page.
+#FRAME_INVITE_BASE=https://frame.crow.sg/i
+
+
+# ── Limits ─────────────────────────────────────────────────────────────────
+
+# [panel] Maximum upload size per photo/video (MB).
+#FRAME_MAX_UPLOAD_MB=50
+
+# [panel] Maximum video length the app will record/accept (seconds).
+#FRAME_MAX_VIDEO_SECONDS=15
+
+# [panel] Maximum friends per user; 0 = unlimited.
+#FRAME_MAX_FRIENDS=0
+
+
+# ── Sign in with Apple / Google ────────────────────────────────────────────
+# The defaults accept the official Frame apps. Change only if you build and
+# sign the apps yourself.
+
+#FRAME_APPLE_AUDIENCES=com.crowtech.frame,com.crowtech.frame.signin
+#FRAME_GOOGLE_CLIENT_IDS=
+
+
+# ── E-mail (optional) ──────────────────────────────────────────────────────
+# Enables "forgot password" e-mails. Without it, reset passwords in the admin
+# panel (Users → Reset password) or with `frame-admin user reset-password <user>`.
+
+#FRAME_SMTP_URL='smtps://user:password@smtp.example.com:465'
+#FRAME_SMTP_FROM=frame@example.com
+
+
+# ── Logging ────────────────────────────────────────────────────────────────
+
+# debug, info, warn or error. Logs never contain passwords, tokens or messages.
+#FRAME_LOG_LEVEL=info

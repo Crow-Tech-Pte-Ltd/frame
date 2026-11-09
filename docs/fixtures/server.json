@@ -1,0 +1,23 @@
+{
+  "name": "Test Frame",
+  "version": "0.1.0",
+  "api_version": 1,
+  "server_id": "01JC3V9Z4X8Q2M7T5R1N6K0B3H",
+  "registration": "invite",
+  "user_invites": true,
+  "auth_methods": {
+    "apple": true,
+    "email": true,
+    "google": false,
+    "phone": true
+  },
+  "password_reset": "admin",
+  "limits": {
+    "max_video_ms": 15000,
+    "max_upload_bytes": 52428800,
+    "max_caption_length": 64,
+    "max_friends": null
+  },
+  "push": null
+}
+

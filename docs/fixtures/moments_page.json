@@ -1,0 +1,200 @@
+{
+  "moments": [
+    {
+      "id": "01M6TYACDR8KNV33NEZJKQ51G3",
+      "author": {
+        "id": "01M6TY3KM8RX90WDGAMG244Z4G",
+        "username": "bob",
+        "display_name": "Bob",
+        "avatar": {
+          "url": "/m/01M6TY3KM8RX90WDGAMG244Z4Q?e=1794142800&s=PX2hw995uM0rBTNwEXvrGlViT6roWEQyAogtkgdHIKI",
+          "width": 512,
+          "height": 512,
+          "content_type": "image/jpeg",
+          "duration_ms": null,
+          "bytes": 8682
+        }
+      },
+      "kind": "video",
+      "created_at": 1794053059000,
+      "caption": null,
+      "media": {
+        "url": "/m/01M6TYACDR8KNV33NEZJKQ51G1?e=1794142800&s=VeSKYC9vmIpFQCh5vXe9p7TTTrieevEVglVFZfn3VdQ",
+        "width": 480,
+        "height": 480,
+        "content_type": "video/mp4",
+        "duration_ms": 4000,
+        "bytes": 131311
+      },
+      "thumb": {
+        "url": "/m/01M6TYACDR8KNV33NEZJKQ51G2?e=1794142800&s=3VcCvmuHTv8PKrhjgJzii1h-RZ-T1XOoR3uT3jN0nlQ",
+        "width": 128,
+        "height": 128,
+        "content_type": "image/jpeg",
+        "duration_ms": null,
+        "bytes": 4072
+      },
+      "audience": "all",
+      "recipient_ids": null,
+      "local_date": "2026-11-07",
+      "reactions": [],
+      "viewers": null,
+      "viewed": false
+    },
+    {
+      "id": "01M6TY989G4W670A5WH17RYY51",
+      "author": {
+        "id": "01M6TY3KM8RX90WDGAMG244Z4G",
+        "username": "bob",
+        "display_name": "Bob",
+        "avatar": {
+          "url": "/m/01M6TY3KM8RX90WDGAMG244Z4Q?e=1794142800&s=PX2hw995uM0rBTNwEXvrGlViT6roWEQyAogtkgdHIKI",
+          "width": 512,
+          "height": 512,
+          "content_type": "image/jpeg",
+          "duration_ms": null,
+          "bytes": 8682
+        }
+      },
+      "kind": "photo",
+      "created_at": 1794053022000,
+      "caption": {
+        "type": "location",
+        "text": "Café Central",
+        "style": "glass",
+        "color": null,
+        "background": null,
+        "data": {
+          "name": "Café Central"
+        }
+      },
+      "media": {
+        "url": "/m/01M6TY989G4W670A5WH17RYY4Z?e=1794142800&s=o59ky2uMk0AL61mWD5g9Ay2ca5NMjGaeREUxoO6_qUI",
+        "width": 1440,
+        "height": 1440,
+        "content_type": "image/jpeg",
+        "duration_ms": null,
+        "bytes": 10431
+      },
+      "thumb": {
+        "url": "/m/01M6TY989G4W670A5WH17RYY50?e=1794142800&s=G4SNRWxWlMdOA5HSCVE15Sml8qpdTEKAFMTHzMaRtpw",
+        "width": 128,
+        "height": 128,
+        "content_type": "image/jpeg",
+        "duration_ms": null,
+        "bytes": 4072
+      },
+      "audience": "all",
+      "recipient_ids": null,
+      "local_date": "2026-11-07",
+      "reactions": [
+        {
+          "user": {
+            "id": "01M6TY2FG01S1D9JQ8GS4GHR5R",
+            "username": "alice",
+            "display_name": "Alice L.",
+            "avatar": {
+              "url": "/m/01M6TY3KM8RX90WDGAMG244Z4P?e=1794142800&s=CZ16aFvBNfuA6UhmjNQTUuqr-UgYRRERLK6OuzI-us8",
+              "width": 512,
+              "height": 512,
+              "content_type": "image/jpeg",
+              "duration_ms": null,
+              "bytes": 8243
+            }
+          },
+          "emoji": "🔥",
+          "created_at": 1794053096000
+        }
+      ],
+      "viewers": null,
+      "viewed": true
+    },
+    {
+      "id": "01M6TY8458ST9KEDVB1S6TH3JC",
+      "author": {
+        "id": "01M6TY2FG01S1D9JQ8GS4GHR5R",
+        "username": "alice",
+        "display_name": "Alice L.",
+        "avatar": {
+          "url": "/m/01M6TY3KM8RX90WDGAMG244Z4P?e=1794142800&s=CZ16aFvBNfuA6UhmjNQTUuqr-UgYRRERLK6OuzI-us8",
+          "width": 512,
+          "height": 512,
+          "content_type": "image/jpeg",
+          "duration_ms": null,
+          "bytes": 8243
+        }
+      },
+      "kind": "photo",
+      "created_at": 1794052985000,
+      "caption": {
+        "type": "text",
+        "text": "sunset 🌅",
+        "style": "classic",
+        "color": null,
+        "background": null,
+        "data": null
+      },
+      "media": {
+        "url": "/m/01M6TY8458ST9KEDVB1S6TH3JA?e=1794142800&s=L4guFJQeHMt55siQMvyEakhsW9fCfbJCQYJp6015kBc",
+        "width": 1440,
+        "height": 1440,
+        "content_type": "image/jpeg",
+        "duration_ms": null,
+        "bytes": 10431
+      },
+      "thumb": {
+        "url": "/m/01M6TY8458ST9KEDVB1S6TH3JB?e=1794142800&s=BDMqzJJxkBYcXKkdTlTW9oX4i0BzEpnLvn7i99xiYmY",
+        "width": 128,
+        "height": 128,
+        "content_type": "image/jpeg",
+        "duration_ms": null,
+        "bytes": 4072
+      },
+      "audience": "all",
+      "recipient_ids": [
+        "01M6TY3KM8RX90WDGAMG244Z4G"
+      ],
+      "local_date": "2026-11-07",
+      "reactions": [
+        {
+          "user": {
+            "id": "01M6TY3KM8RX90WDGAMG244Z4G",
+            "username": "bob",
+            "display_name": "Bob",
+            "avatar": {
+              "url": "/m/01M6TY3KM8RX90WDGAMG244Z4Q?e=1794142800&s=PX2hw995uM0rBTNwEXvrGlViT6roWEQyAogtkgdHIKI",
+              "width": 512,
+              "height": 512,
+              "content_type": "image/jpeg",
+              "duration_ms": null,
+              "bytes": 8682
+            }
+          },
+          "emoji": "😍",
+          "created_at": 1794053096000
+        }
+      ],
+      "viewers": [
+        {
+          "user": {
+            "id": "01M6TY3KM8RX90WDGAMG244Z4G",
+            "username": "bob",
+            "display_name": "Bob",
+            "avatar": {
+              "url": "/m/01M6TY3KM8RX90WDGAMG244Z4Q?e=1794142800&s=PX2hw995uM0rBTNwEXvrGlViT6roWEQyAogtkgdHIKI",
+              "width": 512,
+              "height": 512,
+              "content_type": "image/jpeg",
+              "duration_ms": null,
+              "bytes": 8682
+            }
+          },
+          "viewed_at": 1794053096000
+        }
+      ],
+      "viewed": true
+    }
+  ],
+  "next_cursor": null
+}
+
