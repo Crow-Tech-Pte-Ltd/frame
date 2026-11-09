@@ -1,0 +1,17 @@
+# Build frame-server from this checkout instead of pulling the published image.
+# Use it on top of either compose file (paths are relative to deploy/):
+#
+#   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+#   docker compose -f docker-compose.caddy.yml -f docker-compose.build.yml up -d --build
+#
+# Keep passing both -f options to later commands (logs, exec, down), or put
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.build.yml
+# in deploy/.env so plain `docker compose …` picks up both files.
+
+services:
+  frame:
+    image: frame-server:local
+    pull_policy: build
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile

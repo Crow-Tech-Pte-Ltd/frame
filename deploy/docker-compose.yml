@@ -1,0 +1,98 @@
+# Frame server with Docker Compose.
+#
+#   cd deploy
+#   cp frame.conf.example frame.conf     # then edit it (all keys optional)
+#   docker compose up -d                 # pulls the official image
+#   docker compose logs -f frame
+#
+# Build from source instead of pulling (see docker-compose.build.yml):
+#   docker compose -f docker-compose.yml -f docker-compose.build.yml up -d --build
+#
+# Admin CLI:   docker compose exec frame frame-server admin user list
+# Backup:      docker compose exec frame frame-server backup /data/backup.db
+#
+# In every setup set FRAME_PUBLIC_URL=https://<your domain> in frame.conf:
+# Sign in with Apple/Google only work when it is set (sign-ins are bound to it).
+#
+# Pick ONE way to make the server reachable (see docs/SELF-HOSTING.md):
+#   a) Built-in HTTPS: set FRAME_DOMAIN in frame.conf and publish 80 + 443
+#      (swap the `ports:` block below). Clients connect directly: leave
+#      FRAME_TRUSTED_PROXIES unset.
+#   b) Cloudflare Tunnel: remove `ports:`, uncomment the `cloudflared` service
+#      AND the (b) FRAME_TRUSTED_PROXIES line below.
+#   c) Caddy in front: use docker-compose.caddy.yml instead of this file.
+#   d) Your own reverse proxy on this host: keep 127.0.0.1:8080 below and
+#      uncomment the (d) FRAME_TRUSTED_PROXIES line below.
+
+name: frame
+
+services:
+  frame:
+    # Official multi-arch image (amd64, arm64). The ":0" tag follows 0.x
+    # releases; pin an exact version (e.g. ":0.1.0") to upgrade only by hand.
+    image: ghcr.io/crow-tech-pte-ltd/frame-server:0
+    restart: unless-stopped
+    env_file: frame.conf
+    environment:
+      # Fixed inside the container (these override frame.conf).
+      FRAME_DATA_DIR: /data
+      FRAME_LISTEN: ":8080"
+      # Real client IPs for rate limiting. Pick the line for your setup:
+      # (b) cloudflared container on frame-net (subnet pinned below):
+      # FRAME_TRUSTED_PROXIES: "cloudflare,172.31.251.0/24"
+      # (d) proxy on the host via 127.0.0.1:8080 — Docker forwards those
+      #     connections from the frame-net gateway:
+      # FRAME_TRUSTED_PROXIES: "172.31.251.1/32"
+    volumes:
+      - frame-data:/data
+    networks: [frame-net]
+    ports:
+      # (d) only this machine can reach plain HTTP :8080.
+      - "127.0.0.1:8080:8080"
+      # (a) built-in HTTPS with FRAME_DOMAIN — use these two instead:
+      # - "80:80"
+      # - "443:443"
+    # Hardening: read-only root filesystem, no capabilities, no privilege
+    # escalation. The only writable places are /data and a private /tmp.
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    # No HEALTHCHECK: the distroless image has no shell or curl. Monitor
+    # https://<your-server>/healthz from outside instead (uptime checker), or
+    # use the Caddy variant, which health-checks the server for you.
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  # (b) Cloudflare Tunnel — no open ports, works behind home routers/CGNAT.
+  # In the Cloudflare dashboard (Zero Trust → Networks → Tunnels) create a
+  # tunnel, add a public hostname whose service is  http://frame:8080 , and
+  # put the tunnel token in deploy/.env as CLOUDFLARE_TUNNEL_TOKEN=... .
+  # cloudflared:
+  #   image: cloudflare/cloudflared:latest
+  #   restart: unless-stopped
+  #   command: tunnel --no-autoupdate run
+  #   environment:
+  #     TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN:?set CLOUDFLARE_TUNNEL_TOKEN in deploy/.env}
+  #   depends_on: [frame]
+  #   networks: [frame-net]
+  #   read_only: true
+  #   cap_drop: [ALL]
+  #   security_opt:
+  #     - no-new-privileges:true
+
+networks:
+  frame-net:
+    ipam:
+      config:
+        # Pinned so FRAME_TRUSTED_PROXIES can name it. If it collides with a
+        # network you already use, change it here and in the lines above.
+        - subnet: 172.31.251.0/24
+          gateway: 172.31.251.1
+
+volumes:
+  # Holds the database, media (local storage) and secrets.json. Back it up.
+  frame-data:

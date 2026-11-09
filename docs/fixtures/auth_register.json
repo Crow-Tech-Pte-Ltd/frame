@@ -1,0 +1,29 @@
+{
+  "token": "21wHmCb56ztTh2ctiTdRY33f_IFOzkMataoa6RVswlc",
+  "user": {
+    "id": "01M6TY2FG01S1D9JQ8GS4GHR5R",
+    "username": null,
+    "display_name": "Alice",
+    "avatar": null,
+    "email": "alice@example.com",
+    "phone": null,
+    "auth_methods": [
+      "password"
+    ],
+    "discoverable": true,
+    "searchable": true,
+    "read_receipts": true,
+    "streak": {
+      "count": 0,
+      "last_date": null
+    },
+    "stats": {
+      "moments": 0,
+      "friends": 0
+    },
+    "is_admin": false,
+    "created_at": 1794052800000
+  },
+  "is_new": true
+}
+

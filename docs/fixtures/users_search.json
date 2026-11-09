@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "user": {
+        "id": "01M6TY3KM8RX90WDGAMG244Z4J",
+        "username": "carol",
+        "display_name": "Carol",
+        "avatar": null
+      },
+      "friendship": "outgoing"
+    }
+  ]
+}
+

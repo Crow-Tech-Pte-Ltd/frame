@@ -1,0 +1,81 @@
+#!/bin/sh
+# frame-admin — run frame-server's admin CLI as the Frame service user.
+#
+# Installed to /usr/local/bin/frame-admin by install.sh. The server runs as a
+# systemd DynamicUser, so its data directory belongs to that user; running
+# `frame-server admin …` directly as root would create root-owned database
+# files the service can no longer write. This wrapper starts the command in a
+# transient unit with the same user, state directory and configuration.
+#
+# Examples:
+#   sudo frame-admin user list
+#   sudo frame-admin user create --email alice@example.com --name Alice
+#   sudo frame-admin user reset-password alice
+#   sudo frame-admin invite create alice
+#   sudo frame-admin backup /root/frame-backup-$(date +%F).db
+#   sudo frame-admin version
+set -eu
+
+BIN=/usr/local/bin/frame-server
+CONF=/etc/frame/frame.conf
+STATE=/var/lib/frame
+
+if [ "$(id -u)" -ne 0 ]; then
+	exec sudo -- "$0" "$@"
+fi
+[ $# -gt 0 ] || { sed -n '2,17p' "$0" | sed 's/^# \{0,1\}//'; exit 2; }
+[ -x "$BIN" ] || { echo "frame-admin: $BIN not found (run install.sh first)" >&2; exit 1; }
+[ -r "$CONF" ] || { echo "frame-admin: $CONF not found" >&2; exit 1; }
+
+# plain_file FILE: true for a regular file that isn't a symlink and has a
+# single link. A backup is written by the service user, so this is checked
+# (after moving it out of the state directory) before chown/chmod, which
+# follow symlinks: a compromised service must not be able to make root
+# change the owner or mode of a system file.
+plain_file() {
+	[ -f "$1" ] && [ ! -L "$1" ] && [ "$(stat -c %h -- "$1")" = 1 ]
+}
+
+run_as_service() {
+	systemd-run --quiet --wait --pipe --collect --service-type=exec \
+		--property=DynamicUser=yes --property=User=frame --property=Group=frame \
+		--property=StateDirectory=frame --property=UMask=0077 \
+		--property=EnvironmentFile="$CONF" \
+		--property=Environment=FRAME_DATA_DIR="$STATE" \
+		--property=WorkingDirectory="$STATE" \
+		--property=NoNewPrivileges=yes --property=ProtectSystem=strict \
+		--property=ProtectHome=yes --property=PrivateTmp=yes \
+		"$BIN" "$@"
+}
+
+case "$1" in
+admin)
+	shift
+	run_as_service admin "$@"
+	;;
+backup)
+	# The service user can only write inside its state directory, so back up
+	# there first and then move the file (as root) to where you asked.
+	dest=${2:?usage: frame-admin backup /path/to/frame-backup.db}
+	[ ! -e "$dest" ] || { echo "frame-admin: $dest already exists" >&2; exit 1; }
+	name="frame-backup-$$.db"
+	run_as_service backup "$STATE/$name"
+	mv "$STATE/$name" "$dest"
+	if ! plain_file "$dest"; then
+		rm -f "$dest"
+		echo "frame-admin: the backup is not a plain file (symlink or hard link?); refusing" >&2
+		exit 1
+	fi
+	chown root:root "$dest"
+	chmod 0600 "$dest"
+	echo "Database backup written to $dest"
+	echo "Also back up $STATE/secrets.json (and $STATE/media/ when using local storage)."
+	;;
+version | --version)
+	"$BIN" version
+	;;
+*)
+	# Shorthand: `frame-admin user list` == `frame-admin admin user list`.
+	run_as_service admin "$@"
+	;;
+esac

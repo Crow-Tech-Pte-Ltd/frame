@@ -1,0 +1,33 @@
+{
+  "conversations": [
+    {
+      "peer": {
+        "id": "01M6TY3KM8RX90WDGAMG244Z4G",
+        "username": "bob",
+        "display_name": "Bob",
+        "avatar": {
+          "url": "/m/01M6TY3KM8RX90WDGAMG244Z4Q?e=1794142800&s=PX2hw995uM0rBTNwEXvrGlViT6roWEQyAogtkgdHIKI",
+          "width": 512,
+          "height": 512,
+          "content_type": "image/jpeg",
+          "duration_ms": null,
+          "bytes": 8682
+        }
+      },
+      "last_message": {
+        "id": "01M6TYH578E84T1MS69NXFN0X6",
+        "client_id": "00000008-0000-4000-8000-000000000008",
+        "sender_id": "01M6TY3KM8RX90WDGAMG244Z4G",
+        "recipient_id": "01M6TY2FG01S1D9JQ8GS4GHR5R",
+        "text": "see you saturday?",
+        "created_at": 1794053281000,
+        "moment": null,
+        "reactions": [],
+        "read_at": null
+      },
+      "unread_count": 1,
+      "updated_at": 1794053281000
+    }
+  ]
+}
+

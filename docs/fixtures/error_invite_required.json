@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "invite_required",
+    "message": "This server is invite-only: you need an invite link from a member or the admin"
+  }
+}
+

@@ -1,0 +1,42 @@
+{
+  "id": "01M6TYACDR8KNV33NEZJKQ51G3",
+  "author": {
+    "id": "01M6TY3KM8RX90WDGAMG244Z4G",
+    "username": "bob",
+    "display_name": "Bob",
+    "avatar": {
+      "url": "/m/01M6TY3KM8RX90WDGAMG244Z4Q?e=1794142800&s=PX2hw995uM0rBTNwEXvrGlViT6roWEQyAogtkgdHIKI",
+      "width": 512,
+      "height": 512,
+      "content_type": "image/jpeg",
+      "duration_ms": null,
+      "bytes": 8682
+    }
+  },
+  "kind": "video",
+  "created_at": 1794053059000,
+  "caption": null,
+  "media": {
+    "url": "/m/01M6TYACDR8KNV33NEZJKQ51G1?e=1794142800&s=VeSKYC9vmIpFQCh5vXe9p7TTTrieevEVglVFZfn3VdQ",
+    "width": 480,
+    "height": 480,
+    "content_type": "video/mp4",
+    "duration_ms": 4000,
+    "bytes": 131311
+  },
+  "thumb": {
+    "url": "/m/01M6TYACDR8KNV33NEZJKQ51G2?e=1794142800&s=3VcCvmuHTv8PKrhjgJzii1h-RZ-T1XOoR3uT3jN0nlQ",
+    "width": 128,
+    "height": 128,
+    "content_type": "image/jpeg",
+    "duration_ms": null,
+    "bytes": 4072
+  },
+  "audience": "all",
+  "recipient_ids": null,
+  "local_date": "2026-11-07",
+  "reactions": [],
+  "viewers": null,
+  "viewed": false
+}
+

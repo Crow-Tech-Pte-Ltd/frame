@@ -1,0 +1,166 @@
+name: Release
+
+# Push a tag like v1.2.3 (or v1.2.3-rc.1 for a pre-release) to:
+#   1. run the server checks;
+#   2. publish a GitHub release with exactly the files deploy/install.sh
+#      downloads: frame-server-linux-{amd64,arm64,armv7}, frame.service,
+#      frame-admin, frame.conf.example and SHA256SUMS, plus install.sh itself;
+#   3. push the multi-arch image ghcr.io/<owner>/frame-server tagged X.Y.Z,
+#      X and latest (pre-releases only get X.Y.Z-suffix).
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - name: Check the tag format
+        working-directory: .
+        run: |
+          printf '%s\n' "$GITHUB_REF_NAME" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$' || {
+            echo "::error::release tags must look like v1.2.3 or v1.2.3-rc.1, got '$GITHUB_REF_NAME'"
+            exit 1
+          }
+
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version-file: server/go.mod
+          cache-dependency-path: server/go.sum
+
+      - name: gofmt
+        run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+
+      - name: go vet
+        run: go vet ./...
+
+      - name: go test -race
+        run: go test -race -count=1 ./...
+
+  binaries:
+    name: GitHub release
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write # create the release and upload its assets
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-go@v7.0.0
+        with:
+          go-version-file: server/go.mod
+          cache-dependency-path: server/go.sum
+
+      - name: Build the release assets
+        working-directory: server
+        env:
+          CGO_ENABLED: "0"
+        run: |
+          version=${GITHUB_REF_NAME#v}
+          out="$GITHUB_WORKSPACE/dist"
+          mkdir -p "$out"
+          build() { # GOARCH GOARM asset-suffix
+            GOOS=linux GOARCH=$1 GOARM=$2 go build -trimpath \
+              -ldflags "-s -w -X main.version=$version" \
+              -o "$out/frame-server-linux-$3" ./cmd/frame-server
+          }
+          build amd64 "" amd64
+          build arm64 "" arm64
+          build arm 7 armv7
+          cp ../deploy/install.sh ../deploy/frame.service ../deploy/frame-admin ../deploy/frame.conf.example "$out/"
+          cd "$out"
+          sha256sum frame-server-linux-amd64 frame-server-linux-arm64 frame-server-linux-armv7 \
+            frame.service frame-admin frame.conf.example install.sh > SHA256SUMS
+          cat SHA256SUMS
+          ./frame-server-linux-amd64 version
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          flags=""
+          case "$GITHUB_REF_NAME" in *-*) flags="--prerelease" ;; esac
+          # shellcheck disable=SC2086
+          gh release create "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --verify-tag \
+            --title "Frame $GITHUB_REF_NAME" --generate-notes $flags dist/*
+
+  image:
+    name: Container image
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write # push to ghcr.io
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Image name and tags
+        id: meta
+        run: |
+          image="ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/frame-server"
+          version=${GITHUB_REF_NAME#v}
+          tags="$image:$version"
+          case $version in
+          *-*) ;; # pre-release: exact tag only
+          *) tags="$tags,$image:${version%%.*},$image:latest" ;;
+          esac
+          {
+            echo "version=$version"
+            echo "tags=$tags"
+          } >> "$GITHUB_OUTPUT"
+          echo "$tags"
+
+      # The Dockerfile cross-compiles in a $BUILDPLATFORM stage, so no QEMU is needed.
+      - uses: docker/setup-buildx-action@v4.4.1
+
+      - uses: docker/login-action@v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v7.4.0
+        with:
+          context: .
+          file: deploy/Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          build-args: VERSION=${{ steps.meta.outputs.version }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: |
+            org.opencontainers.image.title=frame-server
+            org.opencontainers.image.description=Frame: self-hosted photo sharing with friends (server)
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.url=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.documentation=${{ github.server_url }}/${{ github.repository }}/blob/main/docs/SELF-HOSTING.md
+            org.opencontainers.image.version=${{ steps.meta.outputs.version }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=AGPL-3.0-only
+            org.opencontainers.image.vendor=Crow Tech Pte. Ltd.
+          annotations: |
+            index:org.opencontainers.image.description=Frame: self-hosted photo sharing with friends (server)
+            index:org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            index:org.opencontainers.image.licenses=AGPL-3.0-only

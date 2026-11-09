@@ -1,0 +1,17 @@
+{
+  "user": {
+    "id": "01M6TY3KM8RX90WDGAMG244Z4G",
+    "username": "bob",
+    "display_name": "Bob",
+    "avatar": {
+      "url": "/m/01M6TY3KM8RX90WDGAMG244Z4Q?e=1794142800&s=PX2hw995uM0rBTNwEXvrGlViT6roWEQyAogtkgdHIKI",
+      "width": 512,
+      "height": 512,
+      "content_type": "image/jpeg",
+      "duration_ms": null,
+      "bytes": 8682
+    }
+  },
+  "friendship": "friends"
+}
+
