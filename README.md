@@ -20,9 +20,14 @@ This repository is the **Frame server**, which anyone can run:
 
 ## The apps
 
-- **iOS** (iPhone, iOS 17+, with home-screen and lock-screen widgets): coming
-  soon to the App Store.
-- **Android**: later.
+- **iOS** (iPhone, iOS 17 or later, with home-screen and lock-screen widgets):
+  on the App Store as **Frame – Photos with Friends** (store links on
+  [crow.sg/apps/frame](https://crow.sg/apps/frame/)).
+- **Android** (Android 10 or later, with a home-screen widget):
+  [Frame on Google Play](https://play.google.com/store/apps/details?id=com.crowtech.frame).
+
+Both apps are free, with no ads or in-app purchases. A step-by-step guide to
+running your own server: [crow.sg/apps/frame/docs](https://crow.sg/apps/frame/docs/).
 
 The apps are published by Crow Tech and connect to any Frame server: you type
 your server's address when you sign up. Notifications go through a small,
