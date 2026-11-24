@@ -1,3 +1,5 @@
+<p align="center"><img src=".github/logo.png" width="112" alt="Frame logo"></p>
+
 # Frame
 
 **Live photos from your people, on your home screen, on a server you own.**
