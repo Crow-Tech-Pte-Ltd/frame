@@ -72,6 +72,11 @@ func (s *Server) handleCreateMoment(w http.ResponseWriter, r *http.Request, a *a
 	if r.ContentLength > limit {
 		return errPayloadTooLarge
 	}
+	release, err := s.uploads.acquire(a.ID(), limit)
+	if err != nil {
+		return err
+	}
+	defer release()
 	r.Body = http.MaxBytesReader(w, r.Body, limit)
 	rc := http.NewResponseController(w)
 	// The server-wide WriteTimeout (60 s) starts when the headers are read,

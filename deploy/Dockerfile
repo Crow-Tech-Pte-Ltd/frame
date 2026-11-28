@@ -20,10 +20,8 @@
 
 # Exact patch release: the golang images set GOTOOLCHAIN=local, so go.mod's
 # toolchain line is ignored here and a stale cached "1.26" image would build
-# with an old, vulnerable standard library. Bump with go.mod's toolchain.
-ARG GO_VERSION=1.26.10
-
-FROM --platform=$BUILDPLATFORM golang:${GO_VERSION}-alpine AS build
+# with an old, vulnerable standard library. Bump the tag and digest with go.mod.
+FROM --platform=$BUILDPLATFORM golang:1.26.11-alpine@sha256:ecb67f987aa1a57794c91d19ade7ae0209f2f0f5496aaef9e6ae85ddf92d02ab AS build
 WORKDIR /src
 COPY server/go.mod server/go.sum ./
 RUN --mount=type=cache,target=/go/pkg/mod \
@@ -38,7 +36,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     GOOS=$TARGETOS GOARCH=$TARGETARCH go build -ldflags "-s -w -X main.version=${VERSION}" -o /out/frame-server ./cmd/frame-server \
  && mkdir -p /out/data
 
-FROM gcr.io/distroless/static-debian13:nonroot
+FROM gcr.io/distroless/static-debian13:nonroot@sha256:8ce6dd87e9823c5b48dcfb2c8604714ccb351ce59607327bcc4957448da279b5
 COPY --from=build /out/frame-server /usr/local/bin/frame-server
 # /data must be owned by the runtime user so a fresh named volume is writable.
 COPY --from=build --chown=65532:65532 /out/data /data
