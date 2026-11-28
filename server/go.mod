@@ -6,7 +6,7 @@ toolchain go1.26.11
 
 require (
 	golang.org/x/crypto v0.58.0
-	modernc.org/sqlite v1.62.0
+	modernc.org/sqlite v1.63.0
 )
 
 require (
