@@ -102,6 +102,11 @@ func (s *Server) handlePutAvatar(w http.ResponseWriter, r *http.Request, a *auth
 	if r.ContentLength > maxAvatarBytes {
 		return errPayloadTooLarge
 	}
+	release, err := s.uploads.acquire(a.ID(), maxAvatarBytes)
+	if err != nil {
+		return err
+	}
+	defer release()
 	body, err := io.ReadAll(http.MaxBytesReader(w, r.Body, maxAvatarBytes))
 	if err != nil {
 		var mbe *http.MaxBytesError

@@ -1,0 +1,40 @@
+name: Queue tested Dependabot patches
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions: {}
+
+jobs:
+  queue:
+    if: >-
+      github.repository == 'Crow-Tech-Pte-Ltd/frame' &&
+      github.event.pull_request.user.login == 'dependabot[bot]' &&
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.event.pull_request.base.ref == 'main' && !github.event.pull_request.draft
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      # This job uses GitHub metadata only. It never checks out or runs the pull request's code.
+      - uses: dependabot/fetch-metadata@21025c705c08248db411dc16f3619e6b5f9ea21a # v2
+        id: update
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Queue an admin UI development patch
+        if: >-
+          steps.update.outputs.update-type == 'version-update:semver-patch' &&
+          steps.update.outputs.dependency-type == 'direct:development'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          HEAD: ${{ github.event.pull_request.head.sha }}
+        run: |
+          files=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --paginate --jq '.[].filename')
+          if [[ -z "$files" ]] || grep -qvxE 'admin-ui/(package\.json|bun\.lock)' <<< "$files"; then
+            exit 0
+          fi
+          gh pr merge "$PR" --repo "$GITHUB_REPOSITORY" --auto --squash --match-head-commit "$HEAD"

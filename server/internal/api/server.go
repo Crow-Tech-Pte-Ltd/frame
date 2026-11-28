@@ -69,6 +69,7 @@ type Server struct {
 	admin     http.Handler // separate admin listener (FRAME_ADMIN_LISTEN) or nil
 	stop      chan struct{}
 	started   time.Time
+	uploads   uploadGate
 	settings  atomic.Pointer[liveSettings]
 
 	relayClient *http.Client
@@ -390,7 +391,7 @@ func (s *Server) routes() http.Handler {
 	handle("POST /api/v1/conversations/{peer_id}/read", s.authed(s.handleRead))
 	handle("POST /api/v1/conversations/{peer_id}/typing", s.authed(s.handleTyping))
 	handle("DELETE /api/v1/messages/{id}", s.authed(s.handleDeleteMessage))
-	handle("PUT /api/v1/messages/{id}/reaction", s.authed(s.handlePutMessageReaction))
+	handle("PUT /api/v1/messages/{id}/reaction", s.authed(s.handleReactToMessage))
 	handle("DELETE /api/v1/messages/{id}/reaction", s.authed(s.handleDeleteMessageReaction))
 
 	// Reports (reviewed by the server's admin in /admin)

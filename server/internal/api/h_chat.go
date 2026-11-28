@@ -352,7 +352,7 @@ func (s *Server) deleteMessage(ctx context.Context, m *store.Message) error {
 	return nil
 }
 
-func (s *Server) handlePutMessageReaction(w http.ResponseWriter, r *http.Request, a *authCtx) error {
+func (s *Server) handleReactToMessage(w http.ResponseWriter, r *http.Request, a *authCtx) error {
 	return s.messageReaction(w, r, a, true)
 }
 
